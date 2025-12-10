@@ -16,7 +16,6 @@ export function useCategories() {
             categories.value = response.data.data;
         } catch (err) {
             error.value = err.message || 'Failed to fetch categories';
-            console.error('Error fetching categories:', err);
         } finally {
             loading.value = false;
         }

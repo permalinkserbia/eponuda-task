@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TvCategoryProductsRequest;
 use App\Http\Resources\TelevisionResource;
 use App\Http\Resources\TvCategoryResource;
 use App\Repositories\TelevisionRepositoryInterface;
 use App\Repositories\TvCategoryRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TvCategoryController extends Controller
 {
@@ -30,11 +32,19 @@ class TvCategoryController extends Controller
     /**
      * Display products for a specific category.
      */
-    public function products(Request $request, string $id)
+    public function products(TvCategoryProductsRequest $request, string $id)
     {
-        $page = (int) $request->get('page', 1);
+        $categoryId = (int) $id;
+        
+        // Validate category exists
+        if (!$this->categoryRepository->exists($categoryId)) {
+            abort(404, 'Category not found');
+        }
 
-        $televisions = $this->televisionRepository->paginate(20, (int) $id);
+        $perPage = $request->validated()['per_page'] ?? 20;
+        $page = $request->validated()['page'] ?? 1;
+
+        $televisions = $this->televisionRepository->paginate($perPage, $categoryId, $page);
 
         return TelevisionResource::collection($televisions);
     }

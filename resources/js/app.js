@@ -1,18 +1,34 @@
 import './bootstrap';
 import { createApp } from 'vue';
 import TelevisionsPage from './pages/TelevisionsPage.vue';
-import TvSprejemnikiPage from './pages/TvSprejemnikiPage.vue';
+import TvReceiverPage from './pages/TvReceiverPage.vue';
 
-const path = window.location.pathname;
 
-if (path === '/televisions' || path === '/tv-sprejemniki') {
-    const app = createApp({});
+function initVue() {
+    const path = window.location.pathname;
+    const appElement = document.getElementById('app');
 
-    if (path === '/televisions') {
-        app.component('TelevisionsPage', TelevisionsPage);
-    } else if (path === '/tv-sprejemniki') {
-        app.component('TvSprejemnikiPage', TvSprejemnikiPage);
+    if (!appElement) {
+        return;
     }
 
-    app.mount('#app');
+    if (path === '/televisions' || path === '/tv-sprejemniki') {
+        try {
+            if (path === '/televisions') {
+                const vueApp = createApp(TelevisionsPage);
+                vueApp.mount('#app');
+            } else if (path === '/tv-sprejemniki') {
+                const vueApp = createApp(TvReceiverPage);
+                vueApp.mount('#app');
+            }
+        } catch (error) {
+            appElement.innerHTML = '<div style="padding: 20px; color: red;">Error: ' + error.message + '</div>';
+        }
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVue);
+} else {
+    setTimeout(initVue, 0);
 }

@@ -11,6 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Create TV categories table
+        Schema::create('tv_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('url');
+            $table->foreignId('parent_id')->nullable()->constrained('tv_categories')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        // Create televisions table
         Schema::create('televisions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -21,6 +32,11 @@ return new class extends Migration
             $table->foreignId('tv_category_id')->nullable()->constrained('tv_categories')->onDelete('set null');
             $table->string('external_id')->nullable()->unique();
             $table->timestamps();
+
+            // Add indexes for performance
+            $table->index('tv_category_id');
+            $table->index('created_at');
+            $table->index('price');
         });
     }
 
@@ -30,5 +46,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('televisions');
+        Schema::dropIfExists('tv_categories');
     }
 };

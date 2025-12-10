@@ -8,12 +8,19 @@
 </head>
 <body class="bg-gray-100">
     <div id="app">
-        @if(request()->path() === 'televisions')
-            <televisions-page></televisions-page>
-        @elseif(request()->path() === 'tv-sprejemniki')
-            <tv-sprejemniki-page></tv-sprejemniki-page>
-        @endif
+        <!-- Vue will mount here -->
+        <div style="padding: 20px; text-align: center;">
+            <p>If you see this, Vue hasn't mounted yet.</p>
+            <p>Check the browser console (F12) for errors.</p>
+        </div>
     </div>
+    <script>
+        // Test if JavaScript is working
+        console.log('Blade template loaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, waiting for Vue...');
+        });
+    </script>
 </body>
 </html>
 

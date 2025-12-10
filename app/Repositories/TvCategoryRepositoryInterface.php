@@ -18,5 +18,7 @@ interface TvCategoryRepositoryInterface
     public function updateOrCreate(array $attributes, array $values): TvCategory;
 
     public function getSubcategories(?int $parentId = null): Collection;
+
+    public function exists(int $id): bool;
 }
 

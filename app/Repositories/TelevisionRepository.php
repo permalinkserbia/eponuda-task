@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TelevisionRepository implements TelevisionRepositoryInterface
 {
-    public function paginate(int $perPage = 20, ?int $categoryId = null): LengthAwarePaginator
+    public function paginate(int $perPage = 20, ?int $categoryId = null, ?int $page = null): LengthAwarePaginator
     {
         $query = Television::query();
 
@@ -16,8 +16,10 @@ class TelevisionRepository implements TelevisionRepositoryInterface
             $query->where('tv_category_id', $categoryId);
         }
 
-        return $query->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+        $paginator = $query->orderBy('created_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return $paginator;
     }
 
     public function findByExternalId(string $externalId): ?Television
@@ -34,7 +36,7 @@ class TelevisionRepository implements TelevisionRepositoryInterface
     {
         $television->update($data);
 
-        return $television->fresh();
+        return $television;
     }
 
     public function updateOrCreate(array $attributes, array $values): Television

@@ -18,18 +18,28 @@ export function useTelevisions() {
 
         try {
             const response = await televisionApi.getTelevisions(page, categoryId);
-            televisions.value = response.data.data;
-            pagination.value = {
-                current_page: response.data.current_page,
-                last_page: response.data.last_page,
-                per_page: response.data.per_page,
-                total: response.data.total,
-                from: response.data.from,
-                to: response.data.to,
-            };
+            
+            // Laravel Resource collection with pagination returns: { data: [...], links: {...}, meta: {...} }
+            if (response.data && response.data.data) {
+                televisions.value = response.data.data;
+                
+                // Pagination info is in meta
+                if (response.data.meta) {
+                    pagination.value = {
+                        current_page: response.data.meta.current_page || 1,
+                        last_page: response.data.meta.last_page || 1,
+                        per_page: response.data.meta.per_page || 20,
+                        total: response.data.meta.total || 0,
+                        from: response.data.meta.from || null,
+                        to: response.data.meta.to || null,
+                    };
+                }
+            } else {
+                // Fallback if structure is different
+                televisions.value = Array.isArray(response.data) ? response.data : [];
+            }
         } catch (err) {
             error.value = err.message || 'Failed to fetch televisions';
-            console.error('Error fetching televisions:', err);
         } finally {
             loading.value = false;
         }

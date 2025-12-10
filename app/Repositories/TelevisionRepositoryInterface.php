@@ -7,7 +7,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface TelevisionRepositoryInterface
 {
-    public function paginate(int $perPage = 20, ?int $categoryId = null): LengthAwarePaginator;
+    public function paginate(int $perPage = 20, ?int $categoryId = null, ?int $page = null): LengthAwarePaginator;
 
     public function findByExternalId(string $externalId): ?Television;
 

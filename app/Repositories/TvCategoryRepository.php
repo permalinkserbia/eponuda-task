@@ -36,5 +36,10 @@ class TvCategoryRepository implements TvCategoryRepositoryInterface
     {
         return TvCategory::where('parent_id', $parentId)->get();
     }
+
+    public function exists(int $id): bool
+    {
+        return TvCategory::where('id', $id)->exists();
+    }
 }
 

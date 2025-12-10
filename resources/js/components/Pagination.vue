@@ -1,40 +1,40 @@
 <template>
-    <div class="flex items-center justify-between mt-6">
-        <div class="text-sm text-gray-700">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-gray-200">
+        <div class="text-sm text-gray-600">
             <span v-if="pagination.from && pagination.to">
-                Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} results
+                Prikazujem {{ pagination.from }}–{{ pagination.to }} od {{ pagination.total }} rezultatov
             </span>
             <span v-else>
-                Total: {{ pagination.total }} results
+                Skupaj: {{ pagination.total }} rezultatov
             </span>
         </div>
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
             <button
                 @click="$emit('page-change', pagination.current_page - 1)"
                 :disabled="!hasPreviousPage"
                 :class="[
-                    'px-4 py-2 rounded-md',
+                    'px-4 py-2 rounded-md text-sm font-medium transition-colors',
                     hasPreviousPage
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed',
+                        ? 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed',
                 ]"
             >
-                Previous
+                Nazaj
             </button>
-            <span class="px-4 py-2 text-gray-700">
-                Page {{ pagination.current_page }} of {{ pagination.last_page }}
+            <span class="px-4 py-2 text-sm text-gray-700">
+                Stran {{ pagination.current_page }} od {{ pagination.last_page }}
             </span>
             <button
                 @click="$emit('page-change', pagination.current_page + 1)"
                 :disabled="!hasNextPage"
                 :class="[
-                    'px-4 py-2 rounded-md',
+                    'px-4 py-2 rounded-md text-sm font-medium transition-colors',
                     hasNextPage
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed',
+                        ? 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed',
                 ]"
             >
-                Next
+                Naprej
             </button>
         </div>
     </div>
