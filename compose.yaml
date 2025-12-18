@@ -23,6 +23,7 @@ services:
         depends_on:
             - mysql
             - redis
+        command: /usr/local/bin/php -d variables_order=EGPCS /var/www/html/artisan serve --host=0.0.0.0 --port=80
     mysql:
         image: 'mysql:8.4'
         ports:
