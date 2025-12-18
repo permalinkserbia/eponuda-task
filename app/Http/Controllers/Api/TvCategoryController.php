@@ -8,8 +8,6 @@ use App\Http\Resources\TelevisionResource;
 use App\Http\Resources\TvCategoryResource;
 use App\Repositories\TelevisionRepositoryInterface;
 use App\Repositories\TvCategoryRepositoryInterface;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TvCategoryController extends Controller
 {
@@ -35,7 +33,7 @@ class TvCategoryController extends Controller
     public function products(TvCategoryProductsRequest $request, string $id)
     {
         $categoryId = (int) $id;
-        
+
         // Validate category exists
         if (!$this->categoryRepository->exists($categoryId)) {
             abort(404, 'Category not found');
