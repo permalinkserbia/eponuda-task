@@ -62,8 +62,12 @@ class TelevisionScraperService
             // This bypasses most bot detection systems
             $browsershot = Browsershot::url($url)
                 ->userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+                ->windowSize(1920, 1080)
+                ->deviceScaleFactor(2)
                 ->waitUntilNetworkIdle()
                 ->timeout(60)
+                ->dismissDialogs()
+                ->noSandbox() // Important: must be called before setOption
                 ->setOption('args', [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -71,6 +75,26 @@ class TelevisionScraperService
                     '--disable-gpu',
                     '--disable-software-rasterizer',
                     '--disable-extensions',
+                    '--disable-blink-features=AutomationControlled', // Hide automation flags
+                    '--disable-features=IsolateOrigins,site-per-process',
+                    '--window-size=1920,1080',
+                    '--start-maximized',
+                    '--lang=en-US,en',
+                    '--disable-infobars',
+                    '--disable-notifications',
+                    '--headless=new', // Use new headless mode (less detectable)
+                ])
+                ->setExtraHttpHeaders([
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.9',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive',
+                    'Upgrade-Insecure-Requests' => '1',
+                    'Sec-Fetch-Dest' => 'document',
+                    'Sec-Fetch-Mode' => 'navigate',
+                    'Sec-Fetch-Site' => 'none',
+                    'Sec-Fetch-User' => '?1',
+                    'Cache-Control' => 'max-age=0',
                 ]);
 
             // Try to set chromium path if available - check multiple locations
@@ -106,8 +130,8 @@ class TelevisionScraperService
                 throw new \Exception("Browsershot cannot find Chrome. Please ensure Chrome/Chromium is installed and accessible. Error: {$errorMessage}");
             }
             
-            // Fallback to cURL only for other errors
-            return $this->fetchHtmlWithCurl($url);
+            // Re-throw the Browsershot error - don't fallback to cURL as it will likely also fail
+            throw new \Exception("Browsershot failed for URL: {$url}. Error: {$errorMessage}");
         }
     }
 
