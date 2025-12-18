@@ -1,4 +1,4 @@
-FROM sail-8.5/app
+FROM laravelsail/php84-composer
 
 USER root
 
