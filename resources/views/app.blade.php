@@ -14,13 +14,6 @@
             <p>Check the browser console (F12) for errors.</p>
         </div>
     </div>
-    <script>
-        // Test if JavaScript is working
-        console.log('Blade template loaded');
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, waiting for Vue...');
-        });
-    </script>
 </body>
 </html>
 
