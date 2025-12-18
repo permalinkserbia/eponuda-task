@@ -1,4 +1,4 @@
-FROM laravelsail/php84-composer
+FROM laravelsail/php84-composer:latest
 
 USER root
 
@@ -25,7 +25,7 @@ RUN apt-get update && \
     (apt-get install -y chromium && ln -sf /usr/bin/chromium /usr/bin/chromium-browser) || \
     (apt-get install -y chromium-browser || true) \
     && apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/chromium.deb && docker-php-ext-install pdo pdo_mysql
+    rm -rf /var/lib/apt/lists/* /tmp/chromium.deb
 
 # Ensure /.composer directory exists and has correct permissions
 RUN mkdir -p /.composer && chmod -R ugo+rw /.composer
